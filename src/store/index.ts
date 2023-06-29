@@ -1,5 +1,6 @@
 import {createStore} from 'vuex'
 import {useFetch} from "@vueuse/core";
+import {FetchUserPosts, overFlow} from "@/composables/mixins";
 
 export default createStore({
     state: {
@@ -8,7 +9,11 @@ export default createStore({
         isLoading: false as boolean,
         Users: [] as userType[]
     },
-    getters: {},
+    getters: {
+        preparedUsers(state): userType[] {
+            return state.Users
+        }
+    },
     mutations: {
         loadState(state, value) {
             state.isLoading = value
@@ -18,6 +23,10 @@ export default createStore({
         },
         setError(state, value) {
             state.isError = value
+        },
+        changeModalState(state, value:boolean) {
+            overFlow(value)
+            state.ModalState = value
         }
     },
     actions: {
@@ -29,29 +38,23 @@ export default createStore({
                 commit("setError", true)
             } else {
                 commit("loadUsers", JSON.parse(data.value as string) as userType[])
+
             }
-            dispatch("PrepareUsersPosts")
+          await   dispatch("PrepareUsersPosts")
+
         },
         //Подготовка постов пользователя
         async PrepareUsersPosts({state, commit}) {
 
-            let Data = [] as userType[]
-            state.Users.map(async (p) => {
-                const {
-                    isFetching,
-                    error,
-                    data
-                } = await useFetch(`${process.env.VUE_APP_API}/users/${p.id}/posts?_start=0&_limit=5`)
-                if (error.value) {
-                    commit("setError", true)
-                } else {
-                    p.Posts = JSON.parse(data.value as string)
-                    Data.push(p)
-                }
-            })
-
+            const users = state.Users;
+            const data = await Promise.all(users.map(async (user) => {
+                const posts = await FetchUserPosts(user.id);
+                return { ...user, Posts: posts };
+            }));
+            commit("loadUsers", data)
             commit("loadState", false)
-        }
+        },
+
 
     },
 })

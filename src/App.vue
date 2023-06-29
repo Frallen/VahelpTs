@@ -1,15 +1,16 @@
 <template>
-<Suspense>
-  <div></div>
-</Suspense>
+  <Suspense>
+    <Table></Table>
+  </Suspense>
+  <Modal :isShow="store.state.ModalState" @closeModal="store.commit('changeModalState',false)"></Modal>
 </template>
 
 <script setup lang="ts">
-import {useStore} from 'vuex'
+import Table from "@/components/Table.vue";
+import Modal from "@/components/Modal.vue";
+import {useStore} from "vuex";
 
-const index = useStore()
-index.dispatch("PrepareUsers")
-
+const store = useStore()
 </script>
 
 <style lang="scss">

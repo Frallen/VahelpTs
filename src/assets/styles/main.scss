@@ -5,7 +5,7 @@
 
 html {
   font-size: 16px;
-  font-family: 'Roboto',sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -30,4 +30,24 @@ h6 {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+.button {
+  text-align: center;
+  display: block;
+  text-decoration: none;
+  padding: 10px 15px;
+  width: 100%;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.button-primary {
+  background: $black;
+  @include br(10px);
+  @include trs(0.3s);
 }
