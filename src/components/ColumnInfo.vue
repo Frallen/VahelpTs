@@ -102,6 +102,7 @@ const drop = async (e: Event, newOwnerID: number) => {
     overflow-y: auto;
     margin: 1em 0 2em;
     height: 100%;
+    padding: 0 10px;
 
     &-item {
       border: 1px solid $gray;
