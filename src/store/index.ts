@@ -8,7 +8,7 @@ export default createStore({
         isError: false as boolean,
         isLoading: false as boolean,
         Users: [] as userType[],
-        EditableCell: {} as postType
+        EditableCell: {} as postType,
     },
     getters: {
         preparedUsers(state): userType[] {
@@ -16,7 +16,8 @@ export default createStore({
         },
         preparedModalContent(state): postType {
             return state.EditableCell
-        }
+        },
+
     },
     mutations: {
         loadState(state, value: boolean) {
@@ -34,7 +35,7 @@ export default createStore({
         changeEditableCell(state, value: postType) {
             state.EditableCell = value
         },
-        AddPost(state,value: postType) {
+        AddPost(state, value: postType) {
             state.Users = state.Users.map(p => {
                 if (p.id === value.userId) {
                     p.Posts.push(value)
@@ -63,6 +64,9 @@ export default createStore({
                 }
                 return p
             })
+        },
+        setDragElement(state, elem: postType) {
+            state.EditableCell = elem
         }
     },
     actions: {

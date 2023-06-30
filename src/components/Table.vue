@@ -1,9 +1,9 @@
 <template>
   <div class="table">
     <div class="table-wrapper">
-      <div class="table-column" v-for="item in PreparedTable" :key="item.id">
-        <ColumnInfo :item="item"></ColumnInfo>
-      </div>
+        <div class="table-column" v-for="item in PreparedTable" :key="item.id">
+          <ColumnInfo :item="item"></ColumnInfo>
+        </div>
     </div>
   </div>
 </template>

@@ -5,22 +5,30 @@
         {{ item.Posts.length }}
       </span>
     </div>
-    <div class="column-list">
-      <div class="column-list-item" v-for="p in item.Posts">
-        <div class="title">{{ p.title }}</div>
-        <div class="subTitle">{{ p.body }}</div>
-        <div class="buttons">
-          <button class="button button-primary"
-                  @click.stop="
+    <div class="column-list"
+         @dragover.prevent
+         @dragenter.prevent
+         @drop="drop($event, item.id)">
+      <transition-group name="fade">
+        <div class="column-list-item" :key="p.id" v-for="p in item.Posts"
+             draggable="true"
+             @dragstart="startDrag($event,p)"
+        >
+          <div class="title">{{ p.title }}</div>
+          <div class="subTitle">{{ p.body }}</div>
+          <div class="buttons">
+            <button class="button button-primary"
+                    @click.stop="
                   store.commit('changeModalState', {edit:true,show:true} as modalType);
                   store.commit('changeEditableCell', p)">Изменить
-          </button>
-          <button class="button button-primary"
-                  @click.stop="store.commit('DeleteCell',{userId:item.id,postId:p.id})">
-            Удалить
-          </button>
+            </button>
+            <button class="button button-primary"
+                    @click.stop="store.commit('DeleteCell',{userId:item.id,postId:p.id})">
+              Удалить
+            </button>
+          </div>
         </div>
-      </div>
+      </transition-group>
     </div>
     <button class="button button-primary"
             @click.stop=" store.commit('changeModalState', {edit:false,show:true} as modalType);
@@ -37,15 +45,28 @@
 
 <script setup lang="ts">
 import {useStore} from "vuex";
-
-const store = useStore()
+import {computed} from "vue";
 
 interface propsType {
   item: userType
 }
 
-
+const store = useStore()
 const {item} = defineProps<propsType>()
+
+const startDrag = (e: Event, p: postType) => {
+  store.commit("setDragElement", p)
+}
+
+const draggedElement = computed<postType>(() => store.getters.preparedModalContent)
+const drop = async (e: Event, newOwnerID: number) => {
+  store.commit('DeleteCell', {userId: draggedElement.value.userId, postId: draggedElement.value.id})
+  draggedElement.value.userId = newOwnerID
+  store.commit('AddPost',
+      draggedElement.value
+  )
+};
+
 </script>
 
 <style scoped lang="scss">
@@ -80,6 +101,7 @@ const {item} = defineProps<propsType>()
     overflow-x: hidden;
     overflow-y: auto;
     margin: 1em 0 2em;
+    height: 100%;
 
     &-item {
       border: 1px solid $gray;

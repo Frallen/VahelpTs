@@ -3,7 +3,14 @@
     <Table></Table>
   </Suspense>
   <Modal :isShow="store.state.ModalState.show"
-         @closeModal="store.commit('changeModalState',{edit:false,show:false} as modalType)">
+         @closeModal="store.commit('changeModalState',{edit:false,show:false} as modalType);
+         store.commit('changeEditableCell',
+            {
+              userId: '',
+              id: '',
+              title: '',
+              body: ''
+            })">
     <form @submit.prevent="store.commit(store.state.ModalState.edit?'ChangePostContent':'AddPost', modalContent);
             store.commit('changeModalState',{edit:false,show:false} as modalType)"
           class="form">
