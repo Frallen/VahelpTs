@@ -1,6 +1,6 @@
 <template>
   <div class="column">
-    <div class="column-header"><h5>{{ item.name }}</h5>
+    <div class="column-header" :style="bgColor"><h5>{{ item.name }}</h5>
       <span v-if="item.Posts&&item.Posts.length">
         {{ item.Posts.length }}
       </span>
@@ -49,16 +49,16 @@ import {computed} from "vue";
 
 interface propsType {
   item: userType
+  bgColor: string
 }
 
 const store = useStore()
-const {item} = defineProps<propsType>()
-
+const {item, bgColor} = defineProps<propsType>()
 const startDrag = (e: Event, p: postType) => {
   store.commit("setDragElement", p)
 }
 
-const draggedElement = computed<postType>(() => store.getters.preparedModalContent)
+const draggedElement = computed<postType>(() => store.getters.preparedCell)
 const drop = async (e: Event, newOwnerID: number) => {
   store.commit('DeleteCell', {userId: draggedElement.value.userId, postId: draggedElement.value.id})
   draggedElement.value.userId = newOwnerID
@@ -78,7 +78,7 @@ const drop = async (e: Event, newOwnerID: number) => {
     border: 1px dashed #fff;
     padding: 10px;
     height: 50px;
-    color: $green;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: space-between;

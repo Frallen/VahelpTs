@@ -9,6 +9,7 @@ export default createStore({
         isLoading: false as boolean,
         Users: [] as userType[],
         EditableCell: {} as postType,
+        DraggedCell: {} as postType
     },
     getters: {
         preparedUsers(state): userType[] {
@@ -17,7 +18,9 @@ export default createStore({
         preparedModalContent(state): postType {
             return state.EditableCell
         },
-
+        preparedCell(state): postType {
+            return state.DraggedCell
+        }
     },
     mutations: {
         loadState(state, value: boolean) {
@@ -34,6 +37,9 @@ export default createStore({
         },
         changeEditableCell(state, value: postType) {
             state.EditableCell = value
+        },
+        setDragElement(state, elem: postType) {
+            state.DraggedCell = elem
         },
         AddPost(state, value: postType) {
             state.Users = state.Users.map(p => {
@@ -65,15 +71,12 @@ export default createStore({
                 return p
             })
         },
-        setDragElement(state, elem: postType) {
-            state.EditableCell = elem
-        }
     },
     actions: {
         //Подготовка пользователей
         async PrepareUsers({state, commit, dispatch}) {
             commit("loadState", true)
-            const {isFetching, error, data} = await useFetch(`${process.env.VUE_APP_API}/users?_start=0&_limit=10`)
+            const {isFetching, error, data} = await useFetch(`${process.env.VUE_APP_API}/users`)
             if (error.value) {
                 commit("setError", true)
             } else {

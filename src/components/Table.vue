@@ -1,9 +1,9 @@
 <template>
   <div class="table">
     <div class="table-wrapper">
-        <div class="table-column" v-for="item in PreparedTable" :key="item.id">
-          <ColumnInfo :item="item"></ColumnInfo>
-        </div>
+      <div class="table-column" v-for="item in PreparedTable" :key="item.id">
+        <ColumnInfo :item="item" :bgColor="generateRandomColor()"></ColumnInfo>
+      </div>
     </div>
   </div>
 </template>
@@ -11,6 +11,7 @@
 import {useStore} from "vuex";
 import ColumnInfo from "@/components/ColumnInfo.vue";
 import {computed} from "vue";
+import {generateRandomColor} from "@/composables/mixins";
 
 const store = useStore()
 const PreparedTable = computed(() =>
