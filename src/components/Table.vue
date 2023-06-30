@@ -24,9 +24,8 @@ await index.dispatch("PrepareUsers")
 <style scoped lang="scss">
 .table {
   overflow: auto;
-  height: 100vh;
-  width: 100%;
-  margin: 1em;
+  height: 90vh;
+  padding: 1em;
 
   &-wrapper {
     display: flex;

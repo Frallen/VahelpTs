@@ -1,21 +1,25 @@
 import {createStore} from 'vuex'
 import {useFetch} from "@vueuse/core";
-import {FetchUserPosts, overFlow} from "@/composables/mixins";
+import {FetchUserPosts} from "@/composables/mixins";
 
 export default createStore({
     state: {
-        ModalState: false as boolean,
+        ModalState: {edit: false, show: false} as modalType,
         isError: false as boolean,
         isLoading: false as boolean,
-        Users: [] as userType[]
+        Users: [] as userType[],
+        EditableCell: {} as postType
     },
     getters: {
         preparedUsers(state): userType[] {
             return state.Users
+        },
+        preparedModalContent(state): postType {
+            return state.EditableCell
         }
     },
     mutations: {
-        loadState(state, value) {
+        loadState(state, value: boolean) {
             state.isLoading = value
         },
         loadUsers(state, value) {
@@ -24,9 +28,41 @@ export default createStore({
         setError(state, value) {
             state.isError = value
         },
-        changeModalState(state, value:boolean) {
-            overFlow(value)
+        changeModalState(state, value: modalType) {
             state.ModalState = value
+        },
+        changeEditableCell(state, value: postType) {
+            state.EditableCell = value
+        },
+        AddPost(state,value: postType) {
+            state.Users = state.Users.map(p => {
+                if (p.id === value.userId) {
+                    p.Posts.push(value)
+                }
+                return p
+            })
+        },
+        ChangePostContent(state, value: postType) {
+            state.Users = state.Users.map(p => {
+                if (p.id === value.userId) {
+                    p.Posts = p.Posts.map(z => {
+                        if (z.id === value.id) {
+                            return {...z, body: value.body, title: value.title};
+                        }
+                        return z
+                    })
+                }
+                return p
+            })
+        },
+        DeleteCell(state, obj) {
+            state.Users = state.Users.map(p => {
+                if (p.id === obj.userId) {
+                    p.Posts = p.Posts.filter(p => p.id !== obj.postId)
+
+                }
+                return p
+            })
         }
     },
     actions: {
@@ -40,7 +76,7 @@ export default createStore({
                 commit("loadUsers", JSON.parse(data.value as string) as userType[])
 
             }
-          await   dispatch("PrepareUsersPosts")
+            await dispatch("PrepareUsersPosts")
 
         },
         //Подготовка постов пользователя
@@ -49,12 +85,11 @@ export default createStore({
             const users = state.Users;
             const data = await Promise.all(users.map(async (user) => {
                 const posts = await FetchUserPosts(user.id);
-                return { ...user, Posts: posts };
+                return {...user, Posts: posts};
             }));
             commit("loadUsers", data)
             commit("loadState", false)
         },
-
 
     },
 })

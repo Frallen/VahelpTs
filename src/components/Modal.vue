@@ -1,15 +1,15 @@
 <template>
   <transition name="fade">
-  <div class="modal" v-show="isShow">
-    <div class="modal-head">
-      <div class="icon" @click.stop="emit('closeModal',false)">
-        <img src="@/assets/images/close.svg">
+    <div class="modal" v-show="isShow">
+      <div class="modal-head">
+        <div class="icon" @click.stop="emit('closeModal',false)">
+          <img src="@/assets/images/close.svg">
+        </div>
+      </div>
+      <div class="modal-body">
+        <slot></slot>
       </div>
     </div>
-    <div class="modal-body">
-      <slot></slot>
-    </div>
-  </div>
   </transition>
 </template>
 
@@ -27,12 +27,14 @@ const emit = defineEmits<{ (e: "closeModal", closeModal: boolean): void }>()
 
 <style scoped lang="scss">
 .modal {
-  position: absolute;
-  height: 100%;
-  max-width: 250px;
+  position: fixed;
+  height: auto;
+  max-width: 450px;
   width: 100%;
   right: 0;
-  top: 0;
+  left: 0;
+  top: 25%;
+  margin: 0 auto;
   background: #2626267F;
   display: flex;
   flex-direction: column;
@@ -40,6 +42,10 @@ const emit = defineEmits<{ (e: "closeModal", closeModal: boolean): void }>()
   border-left: 1px solid $black;
   backdrop-filter: blur(8px);
   padding: 20px 15px;
+  @media #{$xs} {
+    max-width: 320px;
+  }
+
   &-head {
     display: flex;
     justify-content: flex-end;
@@ -51,10 +57,7 @@ const emit = defineEmits<{ (e: "closeModal", closeModal: boolean): void }>()
 
   &-body {
     position: relative;
-    @media #{$sm} {
-      min-width: 320px;
-      padding: 2em 10px 1.5em;
-    }
+
   }
 }
 </style>

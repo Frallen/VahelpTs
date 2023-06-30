@@ -29,3 +29,8 @@ interface postType {
     title: string,
     body: string
 }
+
+interface modalType {
+    show:boolean,
+    edit:boolean,
+}

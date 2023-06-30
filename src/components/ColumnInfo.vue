@@ -10,11 +10,28 @@
         <div class="title">{{ p.title }}</div>
         <div class="subTitle">{{ p.body }}</div>
         <div class="buttons">
-          <div class="button button-primary" @click.stop="store.commit('changeModalState',true)">Изменить</div>
-          <div class="button button-primary" @click.stop>Удалить</div>
+          <button class="button button-primary"
+                  @click.stop="
+                  store.commit('changeModalState', {edit:true,show:true} as modalType);
+                  store.commit('changeEditableCell', p)">Изменить
+          </button>
+          <button class="button button-primary"
+                  @click.stop="store.commit('DeleteCell',{userId:item.id,postId:p.id})">
+            Удалить
+          </button>
         </div>
       </div>
     </div>
+    <button class="button button-primary"
+            @click.stop=" store.commit('changeModalState', {edit:false,show:true} as modalType);
+            store.commit('changeEditableCell',
+            {
+              id:item.Posts[item.Posts.length-1].id+1,
+              userId:item.id
+            }
+            )">
+      Добавить
+    </button>
   </div>
 </template>
 
@@ -62,7 +79,7 @@ const {item} = defineProps<propsType>()
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
-    margin: 1em 0 0;
+    margin: 1em 0 2em;
 
     &-item {
       border: 1px solid $gray;
@@ -78,6 +95,7 @@ const {item} = defineProps<propsType>()
       .title {
         font-size: 1em;
         overflow: hidden;
+        font-weight: bold;
         @include text-eclipse(2);
       }
 
@@ -94,6 +112,10 @@ const {item} = defineProps<propsType>()
           margin: 10px 0 0;
         }
       }
+    }
+
+    &-item:first-child {
+      margin: 0;
     }
   }
 }

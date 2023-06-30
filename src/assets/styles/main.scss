@@ -9,7 +9,7 @@ html {
 }
 
 body {
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 h1,
@@ -50,4 +50,45 @@ h6 {
   background: $black;
   @include br(10px);
   @include trs(0.3s);
+}
+
+.input, .textarea {
+  width: 100%;
+  outline: none;
+  background: $black;
+  @include br(10px);
+  border: 1px solid #4D4D4D;
+  padding: 11px 12px;
+  font-size: 14px;
+  line-height: 17px;
+  color: #ffffffcf;
+}
+
+.textarea {
+  resize: none;
+  width: 100%;
+  height: 200px;
+}
+
+.form {
+  &-title {
+    color: #fff;
+    text-align: center;
+    margin: 0 0 1em 0;
+  }
+
+  label {
+    margin: 0 0 1em 0;
+    display: block;
+
+    span {
+      margin: 0 0 1em 0;
+      color: #fff;
+      display: block;
+    }
+  }
+
+  .button {
+
+  }
 }
