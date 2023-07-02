@@ -39,7 +39,8 @@ const emit = defineEmits<{ (e: "closeModal", closeModal: boolean): void }>()
   display: flex;
   flex-direction: column;
   z-index: 99;
-  border-left: 1px solid $black;
+  border: 1px solid $black;
+  @include br(10px);
   backdrop-filter: blur(8px);
   padding: 20px 15px;
   @media #{$xs} {

@@ -17,11 +17,11 @@
       <div class="form-title">{{ store.state.ModalState.edit ? 'Редактирование' : 'Добавление' }}</div>
       <label for="title">
         <span>Название поста</span>
-        <input id="title" type="text" v-model="modalContent.title" class="input">
+        <input id="title" type="text" required v-model="modalContent.title" class="input">
       </label>
       <label for="text">
         <span>Текст поста</span>
-        <textarea id="text" v-model="modalContent.body" class="textarea"/>
+        <textarea id="text" required v-model="modalContent.body" class="textarea"/>
       </label>
       <button type="submit" class="button button-primary"
       >Подтвердить
